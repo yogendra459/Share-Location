@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Share Location</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial; padding: 20px; text-align: center; }
+        button { padding: 15px 25px; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<h2>कृपया अपनी लोकेशन शेयर करें</h2>
+<p>नीचे बटन दबाएं:</p>
+
+<button onclick="sendLocation()">Share My Location</button>
+
+<p id="status"></p>
+
+<script>
+function sendLocation() {
+    const status = document.getElementById('status');
+
+    if (!navigator.geolocation) {
+        status.textContent = "आपका फोन लोकेशन सपोर्ट नहीं करता।";
+        return;
+    }
+
+    status.textContent = "लोकेशन ली जा रही है, कृपया अनुमति दें...";
+
+    navigator.geolocation.getCurrentPosition(success, error, { enableHighAccuracy: true });
+}
+
+function success(pos) {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    const status = document.getElementById('status');
+    status.textContent = "लोकेशन मिल गई, भेजी जा रही है...";
+
+    // 👉 यहाँ अपना Business WhatsApp नंबर डालें
+    const phone = "919351710503";  
+
+    const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+    const textMsg = `Meri location: ${mapsLink}`;
+
+    // Business WhatsApp Direct Link
+    const whatsappURL = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(textMsg)}`;
+
+    window.location.href = whatsappURL;
+}
+
+function error(err) {
+    document.getElementById('status').textContent = "लोकेशन नहीं मिल सकी: " + err.message;
+}
+</script>
+
+</body>
+</html>
